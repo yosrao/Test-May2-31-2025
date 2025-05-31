@@ -1,43 +1,18 @@
 image: gitpod/workspace-full
 
 tasks:
-  - init: Install Apache Server
-    command: |
-      sudo apt-get update
-      sudo apt-get install -y apache2
-      sudo systemctl start apache2
-      sudo systemctl enable apache2
-  - init: Install PHP 8.2
-    command: |
-      sudo apt-get install -y php8.2 libapache2-mod-php8.2
-      sudo systemctl restart apache2
-  - init: Install MySQL Server
-    command: |
-      sudo apt-get install -y mysql-server
-      sudo systemctl start mysql
-      sudo systemctl enable mysql
-  - init: Install PHP MySQL Extension
-    command: |
-      sudo apt-get install -y php8.2-mysql
-      sudo systemctl restart apache2
-  - init: Install Composer
-    command: |
-      curl -sS https://getcomposer.org/installer | php
-      sudo mv composer.phar /usr/local/bin/composer
-  - init: Install Node.js and npm
-    command: |
-      curl -sL https://deb.nodesource.com/setup_18.x | sudo -E bash -
-      sudo apt-get install -y nodejs
-  - init: Install Git
-    command: |
-      sudo apt-get install -y git
-  - init: Install Redis
-    command: |
-      sudo apt-get install -y redis-server
-      sudo systemctl start redis-server
-      sudo systemctl enable redis-server
+      - name: Start Apache
+        init: |
+          sudo apt-get update
+          sudo apt-get install -y apache2
+        before: |
+          sudo systemctl enable apache2
+          sudo systemctl start apache2
+        command: |
+          sudo systemctl status apache2
+
 ports:
-  - name: webserver
+  - name: apache
     port: 80
     onOpen: open-preview
     visibility: public
